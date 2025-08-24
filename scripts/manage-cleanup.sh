@@ -1,7 +1,7 @@
 #!/bin/bash
 # Management script for storage cleanup automation
 
-SCRIPT_DIR="$HOME/.cleanup-scripts"
+SCRIPT_DIR="$HOME/.smartjanitor"
 cd "$SCRIPT_DIR"
 
 show_usage() {
@@ -28,7 +28,7 @@ install_services() {
     echo "Installing storage cleanup automation..."
     
     # Load the weekly service
-    launchctl load ~/Library/LaunchAgents/com.user.storage-cleanup.weekly.plist
+    launchctl load ~/Library/LaunchAgents/com.user.smartjanitor.weekly.plist
     if [ $? -eq 0 ]; then
         echo "✅ Weekly cleanup service installed"
     else
@@ -36,7 +36,7 @@ install_services() {
     fi
     
     # Load the monthly service
-    launchctl load ~/Library/LaunchAgents/com.user.storage-cleanup.monthly.plist
+    launchctl load ~/Library/LaunchAgents/com.user.smartjanitor.monthly.plist
     if [ $? -eq 0 ]; then
         echo "✅ Monthly cleanup service installed"
     else
@@ -56,8 +56,8 @@ uninstall_services() {
     echo "Uninstalling storage cleanup automation..."
     
     # Unload services
-    launchctl unload ~/Library/LaunchAgents/com.user.storage-cleanup.weekly.plist 2>/dev/null
-    launchctl unload ~/Library/LaunchAgents/com.user.storage-cleanup.monthly.plist 2>/dev/null
+    launchctl unload ~/Library/LaunchAgents/com.user.smartjanitor.weekly.plist 2>/dev/null
+    launchctl unload ~/Library/LaunchAgents/com.user.smartjanitor.monthly.plist 2>/dev/null
     
     echo "✅ Services uninstalled"
     echo "💡 Scripts and logs remain in $SCRIPT_DIR"
@@ -70,13 +70,13 @@ show_status() {
     
     # Check if services are loaded
     echo "Service Status:"
-    if launchctl list | grep -q "com.user.storage-cleanup.weekly"; then
+    if launchctl list | grep -q "com.user.smartjanitor.weekly"; then
         echo "  ✅ Weekly service: Running"
     else
         echo "  ❌ Weekly service: Not running"
     fi
     
-    if launchctl list | grep -q "com.user.storage-cleanup.monthly"; then
+    if launchctl list | grep -q "com.user.smartjanitor.monthly"; then
         echo "  ✅ Monthly service: Running"  
     else
         echo "  ❌ Monthly service: Not running"

@@ -5,7 +5,7 @@
 set -e  # Exit on error
 
 # Configuration
-SCRIPT_DIR="$HOME/.cleanup-scripts"
+SCRIPT_DIR="$HOME/.smartjanitor"
 LOG_FILE="$SCRIPT_DIR/logs/weekly-cleanup-$(date +%Y%m%d-%H%M%S).log"
 SUMMARY_FILE="$SCRIPT_DIR/logs/latest-weekly.log"
 

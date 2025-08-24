@@ -1,7 +1,7 @@
 #!/bin/bash
 # Notification sender for cleanup results
 
-SCRIPT_DIR="$HOME/.cleanup-scripts"
+SCRIPT_DIR="$HOME/.smartjanitor"
 CLEANUP_TYPE="$1"  # "weekly" or "monthly"
 SUMMARY_FILE="$SCRIPT_DIR/logs/latest-$CLEANUP_TYPE.log"
 

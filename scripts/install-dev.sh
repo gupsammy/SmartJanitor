@@ -1,5 +1,5 @@
 #!/bin/bash
-# Mac Storage Cleaner - Development Installation
+# SmartJanitor - Development Installation
 # Creates symlinks instead of copying files for easier development
 
 set -e
@@ -21,7 +21,7 @@ BIN_LINK="/usr/local/bin/smartjanitor"
 print_header() {
     echo -e "${PURPLE}"
     echo "╔════════════════════════════════════════╗"
-    echo "║    Mac Storage Cleaner - Dev Install   ║"
+    echo "║       SmartJanitor - Dev Install       ║"
     echo "╚════════════════════════════════════════╝"
     echo -e "${NC}"
 }

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Mac Storage Cleaner is an automated macOS storage cleanup tool that uses a dual approach:
+SmartJanitor is an automated macOS storage cleanup tool that uses a dual approach:
 - **Weekly bash cleanup**: Fast automated cleanup of common storage bloat
 - **Monthly AI analysis**: Claude Code performs intelligent storage analysis
 
