@@ -13,10 +13,10 @@ NC='\033[0m'
 
 # Configuration
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-INSTALL_DIR="$HOME/.mac-storage-cleaner"
+INSTALL_DIR="$HOME/.smartjanitor"
 SCRIPTS_DIR="$INSTALL_DIR/scripts"
 LOGS_DIR="$INSTALL_DIR/logs"
-BIN_LINK="/usr/local/bin/mac-cleanup"
+BIN_LINK="/usr/local/bin/smartjanitor"
 
 print_header() {
     echo -e "${PURPLE}"
@@ -56,7 +56,7 @@ main() {
     print_success "Development environment ready!"
     echo ""
     echo -e "${BLUE}💡 Edit files in: $PROJECT_DIR/scripts/${NC}"
-    echo -e "${BLUE}💡 Test with: mac-cleanup test-weekly${NC}"
+    echo -e "${BLUE}💡 Test with: smartjanitor test-weekly${NC}"
     echo ""
 }
 

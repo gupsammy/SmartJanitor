@@ -21,7 +21,7 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 
 ### Installation Structure
 ```
-~/.mac-storage-cleaner/
+~/.smartjanitor/
 ├── scripts/                    # All executable scripts
 │   ├── weekly-cleanup.sh      # Fast bash cleanup
 │   ├── monthly-claude.sh      # AI analysis
@@ -32,8 +32,8 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 ```
 
 ### Scheduling
-- **Weekly**: Every Sunday at 10:00 AM via `com.user.storage-cleanup.weekly.plist`
-- **Monthly**: 1st of each month at 9:00 AM via `com.user.storage-cleanup.monthly.plist`
+- **Weekly**: Every Sunday at 10:00 AM via `com.user.smartjanitor.weekly.plist`
+- **Monthly**: 1st of each month at 9:00 AM via `com.user.smartjanitor.monthly.plist`
 - Uses macOS `launchd` which handles sleep/wake scenarios properly
 
 ## Development Commands
@@ -44,25 +44,25 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 ./scripts/install-dev.sh
 
 # Test weekly cleanup immediately 
-mac-cleanup test-weekly
+smartjanitor test-weekly
 
 # Test monthly AI analysis (requires Claude Code)
-mac-cleanup test-monthly
+smartjanitor test-monthly
 
 # Check system status
-mac-cleanup status
+smartjanitor status
 
 # View cleanup logs
-mac-cleanup logs
+smartjanitor logs
 ```
 
 ### Management Commands
-The main interface is through the `mac-cleanup` global command (symlinked to `manage-cleanup.sh`):
+The main interface is through the `smartjanitor` global command (symlinked to `manage-cleanup.sh`):
 ```bash
-mac-cleanup status      # Show service status and recent activity
-mac-cleanup schedule    # Show next scheduled run times  
-mac-cleanup logs        # Open logs directory in Finder
-mac-cleanup uninstall   # Remove all services and configs
+smartjanitor status      # Show service status and recent activity
+smartjanitor schedule    # Show next scheduled run times  
+smartjanitor logs        # Open logs directory in Finder
+smartjanitor uninstall   # Remove all services and configs
 ```
 
 ## Claude Code Integration
@@ -111,10 +111,10 @@ claude -p "$CLAUDE_PROMPT" \
 - Claude Code (optional, for AI analysis)
 
 ### Key File Locations
-- LaunchAgents: `~/Library/LaunchAgents/com.user.storage-cleanup.*.plist`
-- Install directory: `~/.mac-storage-cleaner/`
-- Global command: `/usr/local/bin/mac-cleanup`
-- Logs: `~/.mac-storage-cleaner/logs/`
+- LaunchAgents: `~/Library/LaunchAgents/com.user.smartjanitor.*.plist`
+- Install directory: `~/.smartjanitor/`
+- Global command: `/usr/local/bin/smartjanitor`
+- Logs: `~/.smartjanitor/logs/`
 
 ## Logging & Notifications
 

@@ -1,6 +1,6 @@
 #!/bin/bash
-# Mac Storage Cleaner - Uninstaller
-# Safely removes all components
+# SmartJanitor - Uninstaller
+# Safely dismisses your automated cleanup crew
 
 set -e
 
@@ -10,53 +10,60 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 PURPLE='\033[0;35m'
+CYAN='\033[0;36m'
+BOLD='\033[1m'
 NC='\033[0m' # No Color
 
 # Configuration
-INSTALL_DIR="$HOME/.mac-storage-cleaner"
-BIN_LINK="/usr/local/bin/mac-cleanup"
+INSTALL_DIR="$HOME/.smartjanitor"
+BIN_LINK="/usr/local/bin/smartjanitor"
 
 print_header() {
-    echo -e "${PURPLE}"
-    echo "╔════════════════════════════════════════╗"
-    echo "║        Mac Storage Cleaner Uninstall   ║"
-    echo "╚════════════════════════════════════════╝"
+    echo -e "${RED}${BOLD}"
+    echo "    🧹💔 SmartJanitor Departure"
+    echo "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "    Saying goodbye to your cleaning crew..."
     echo -e "${NC}"
+    echo ""
 }
 
 print_step() {
-    echo -e "${BLUE}▶ $1${NC}"
+    echo -e "${BLUE}🔧 $1${NC}"
 }
 
 print_success() {
-    echo -e "${GREEN}✅ $1${NC}"
+    echo -e "${GREEN}✨ $1${NC}"
 }
 
 print_warning() {
-    echo -e "${YELLOW}⚠️  $1${NC}"
+    echo -e "${YELLOW}🚨 $1${NC}"
+}
+
+print_janitor() {
+    echo -e "${CYAN}🧹 $1${NC}"
 }
 
 unload_services() {
-    print_step "Stopping launchd services..."
+    print_step "Stopping the janitor's work schedule..."
     
     # Unload services
-    if launchctl list | grep -q "com.user.storage-cleanup.weekly"; then
-        launchctl unload "$HOME/Library/LaunchAgents/com.user.storage-cleanup.weekly.plist" 2>/dev/null || true
-        print_success "Weekly service stopped"
+    if launchctl list | grep -q "com.user.smartjanitor.weekly"; then
+        launchctl unload "$HOME/Library/LaunchAgents/com.user.smartjanitor.weekly.plist" 2>/dev/null || true
+        print_success "Weekly cleaning service stopped"
     fi
     
-    if launchctl list | grep -q "com.user.storage-cleanup.monthly"; then
-        launchctl unload "$HOME/Library/LaunchAgents/com.user.storage-cleanup.monthly.plist" 2>/dev/null || true
-        print_success "Monthly service stopped"
+    if launchctl list | grep -q "com.user.smartjanitor.monthly"; then
+        launchctl unload "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist" 2>/dev/null || true
+        print_success "Monthly AI analysis service stopped"
     fi
 }
 
 remove_plists() {
-    print_step "Removing launchd configuration..."
+    print_step "Removing janitor's scheduling system..."
     
     local plists=(
-        "$HOME/Library/LaunchAgents/com.user.storage-cleanup.weekly.plist"
-        "$HOME/Library/LaunchAgents/com.user.storage-cleanup.monthly.plist"
+        "$HOME/Library/LaunchAgents/com.user.smartjanitor.weekly.plist"
+        "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist"
     )
     
     for plist in "${plists[@]}"; do
@@ -65,78 +72,86 @@ remove_plists() {
         fi
     done
     
-    print_success "launchd configuration removed"
+    print_success "Scheduling system removed"
 }
 
 remove_symlink() {
-    print_step "Removing command-line shortcut..."
+    print_step "Removing janitor's remote control..."
     
     if [ -L "$BIN_LINK" ]; then
-        sudo rm "$BIN_LINK" 2>/dev/null && print_success "Global command removed" || print_warning "Could not remove global command"
+        sudo rm "$BIN_LINK" 2>/dev/null && print_success "Global smartjanitor command removed" || print_warning "Could not remove global command"
+    else
+        print_janitor "No global command was installed"
     fi
 }
 
 remove_files() {
-    print_step "Removing installation directory..."
+    print_step "Clearing out the janitor's workspace..."
     
     if [ -d "$INSTALL_DIR" ]; then
         # Show what will be removed
-        echo -e "${YELLOW}The following will be removed:${NC}"
+        echo -e "${YELLOW}The janitor's belongings to be removed:${NC}"
         echo "  $INSTALL_DIR/"
-        echo "    ├── scripts/"
-        echo "    └── logs/"
+        echo "    ├── scripts/ (cleaning tools)"
+        echo "    └── logs/ (cleaning history)"
         echo ""
         
-        read -p "Remove all files and logs? (y/N): " -n 1 -r
+        read -p "Remove all janitor files and logs? (y/N): " -n 1 -r
         echo
         
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             rm -rf "$INSTALL_DIR"
-            print_success "All files removed"
+            print_success "Janitor workspace completely cleared"
         else
-            print_warning "Files kept at $INSTALL_DIR"
-            echo -e "  ${BLUE}You can manually remove them later if desired${NC}"
+            print_warning "Janitor's files preserved at $INSTALL_DIR"
+            print_janitor "You can clean them up manually later if needed"
         fi
     else
-        print_success "No installation directory found"
+        print_success "No janitor workspace found (already clean!)"
     fi
 }
 
 show_completion() {
     echo ""
-    echo -e "${GREEN}╔════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║          Uninstall Complete!           ║${NC}"
-    echo -e "${GREEN}╚════════════════════════════════════════╝${NC}"
-    echo ""
+    echo -e "${GREEN}${BOLD}"
+    echo "    🧹💔 Your Janitor Has Left the Building"
+    echo "    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo -e "${NC}"
     
-    echo -e "${BLUE}What was removed:${NC}"
-    echo -e "  ✅ Scheduled cleanup services"
-    echo -e "  ✅ launchd configuration files"
-    echo -e "  ✅ Command-line shortcuts"
+    echo -e "${BLUE}What was cleared out:${NC}"
+    echo -e "  ✨ Stopped all scheduled cleaning services"
+    echo -e "  ✨ Removed automation scheduling"
+    echo -e "  ✨ Disconnected remote control commands"
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "  ✅ All scripts and logs"
+        echo -e "  ✨ Cleaned out all scripts and logs"
     else
-        echo -e "  ⏸️  Scripts and logs preserved"
+        echo -e "  🗂️  Preserved cleaning history and tools"
     fi
     echo ""
     
-    echo -e "${YELLOW}💡 Your Mac will no longer automatically clean storage${NC}"
-    echo -e "${BLUE}You can reinstall anytime with:${NC}"
-    echo -e "  curl -fsSL https://raw.githubusercontent.com/samarthguptadev/mac-storage-cleaner/main/install.sh | bash"
+    echo -e "${YELLOW}⚠️  Your Mac will no longer automatically clean itself${NC}"
+    echo "Storage bloat may start accumulating again."
+    echo ""
+    echo -e "${CYAN}💡 Missing your janitor already?${NC}"
+    echo "Rehire anytime with:"
+    echo -e "${BLUE}  curl -fsSL https://raw.githubusercontent.com/gupsammy/SmartJanitor/main/install.sh | bash${NC}"
+    echo ""
+    echo -e "${PURPLE}Thanks for trying SmartJanitor! 🧹✨${NC}"
     echo ""
 }
 
 main() {
     print_header
     
-    echo -e "${YELLOW}This will completely remove Mac Storage Cleaner from your system.${NC}"
-    echo -e "${YELLOW}Scheduled cleanups will stop running.${NC}"
+    echo -e "${YELLOW}This will dismiss your SmartJanitor and stop all automated cleaning.${NC}"
+    echo "Your Mac will go back to accumulating digital dust."
+    echo "Are you sure about this?"
     echo ""
     
-    read -p "Continue with uninstall? (y/N): " -n 1 -r
+    read -p "Fire your janitor? (y/N): " -n 1 -r
     echo
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        echo "Uninstall cancelled."
+        print_janitor "Smart choice! Your janitor stays on the job."
         exit 0
     fi
     
@@ -150,7 +165,7 @@ main() {
 }
 
 # Handle interruption
-trap 'echo -e "\n${RED}Uninstall interrupted!${NC}"; exit 1' INT
+trap 'echo -e "\n${RED}💥 Uninstall interrupted! Your janitor is confused but still working.${NC}"; exit 1' INT
 
 # Run main function
 main "$@"

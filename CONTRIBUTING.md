@@ -7,8 +7,8 @@ Thank you for your interest in contributing! This document provides guidelines f
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/yourusername/mac-storage-cleaner.git
-   cd mac-storage-cleaner
+   git clone https://github.com/yourusername/SmartJanitor.git
+   cd SmartJanitor
    ```
 3. Install for development:
    ```bash
@@ -18,7 +18,7 @@ Thank you for your interest in contributing! This document provides guidelines f
 ## 🏗️ Project Structure
 
 ```
-mac-storage-cleaner/
+SmartJanitor/
 ├── scripts/
 │   ├── weekly-cleanup.sh         # Main bash cleanup logic
 │   ├── monthly-claude-cleanup.sh # Claude Code integration
@@ -68,16 +68,16 @@ This allows you to edit files and see changes immediately without reinstalling.
 ### Manual Testing
 ```bash
 # Test weekly cleanup (safe to run)
-mac-cleanup test-weekly
+smartjanitor test-weekly
 
 # Test monthly cleanup (requires Claude Code)
-mac-cleanup test-monthly
+smartjanitor test-monthly
 
 # Check service status
-mac-cleanup status
+smartjanitor status
 
 # View logs
-mac-cleanup logs
+smartjanitor logs
 ```
 
 ### Automated Testing
@@ -194,8 +194,8 @@ Contributors are recognized in:
 
 ## 📞 Getting Help
 
-- **General questions**: [GitHub Discussions](https://github.com/samarthguptadev/mac-storage-cleaner/discussions)
-- **Bug reports**: [GitHub Issues](https://github.com/samarthguptadev/mac-storage-cleaner/issues)
+- **General questions**: [GitHub Discussions](https://github.com/samarthguptadev/SmartJanitor/discussions)
+- **Bug reports**: [GitHub Issues](https://github.com/samarthguptadev/SmartJanitor/issues)
 - **Security issues**: Email [security@samarthgupta.dev](mailto:security@samarthgupta.dev)
 
 ## 🤝 Code of Conduct

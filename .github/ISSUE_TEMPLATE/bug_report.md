@@ -24,8 +24,8 @@ A clear and concise description of what you expected to happen.
 
 **Logs**
 Please include relevant log files:
-- `~/.mac-storage-cleaner/logs/weekly-cleanup-*.log`
-- `~/.mac-storage-cleaner/logs/monthly-claude-*.log`
+- `~/.smartjanitor/logs/weekly-cleanup-*.log`
+- `~/.smartjanitor/logs/monthly-claude-*.log`
 - Any error messages from Terminal
 
 **Additional context**
