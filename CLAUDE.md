@@ -43,11 +43,11 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 # Install in development mode
 ./scripts/install-dev.sh
 
-# Test weekly cleanup immediately 
-smartjanitor test-weekly
+# Run standard cleanup immediately 
+smartjanitor standard
 
-# Test monthly AI analysis (requires Claude Code)
-smartjanitor test-monthly
+# Run smart AI analysis (requires Claude Code)
+smartjanitor smart-ai
 
 # Check system status
 smartjanitor status
@@ -120,7 +120,7 @@ claude -p "$CLAUDE_PROMPT" \
 
 ### Log Structure
 - Detailed logs: `logs/weekly-cleanup-YYYYMMDD-HHMMSS.log`
-- Summary logs: `logs/latest-weekly.log`, `logs/latest-monthly.log`
+- Summary logs: `logs/latest-standard.log`, `logs/latest-smart-ai.log`
 - LaunchD logs: `logs/weekly-launchd.out`, `logs/monthly-launchd.out`
 
 ### Interactive Notifications

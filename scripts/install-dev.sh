@@ -57,7 +57,7 @@ main() {
     print_success "Development environment ready!"
     echo ""
     echo -e "${BLUE}💡 Edit files in: $PROJECT_DIR/scripts/${NC}"
-    echo -e "${BLUE}💡 Test with: smartjanitor test-weekly${NC}"
+    echo -e "${BLUE}💡 Test with: smartjanitor standard${NC}"
     echo ""
 }
 

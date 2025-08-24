@@ -73,11 +73,11 @@ This allows you to edit files and see changes immediately without reinstalling.
 ### Manual Testing
 
 ```bash
-# Test weekly cleanup (safe to run)
-smartjanitor test-weekly
+# Run standard cleanup (safe to run)
+smartjanitor standard
 
-# Test monthly cleanup (requires Claude Code)
-smartjanitor test-monthly
+# Run smart AI cleanup (requires Claude Code)
+smartjanitor smart-ai
 
 # Check service status
 smartjanitor status
@@ -166,8 +166,8 @@ Brief description of changes
 ## 🧪 Testing
 
 - [ ] Tested on macOS 14
-- [ ] Tested weekly cleanup
-- [ ] Tested monthly cleanup (if applicable)
+- [ ] Tested standard cleanup
+- [ ] Tested smart AI cleanup (if applicable)
 - [ ] Tested installation process
 - [ ] Verified notifications work
 

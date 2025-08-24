@@ -240,7 +240,7 @@ create_launchd_plists() {
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>$SCRIPTS_DIR/weekly-cleanup.sh && $SCRIPTS_DIR/send-notification.sh weekly</string>
+        <string>$SCRIPTS_DIR/weekly-cleanup.sh && $SCRIPTS_DIR/send-notification.sh standard</string>
     </array>
     
     <key>StartCalendarInterval</key>
@@ -295,7 +295,7 @@ EOF
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>$SCRIPTS_DIR/monthly-claude-cleanup.sh && $SCRIPTS_DIR/send-notification.sh monthly</string>
+        <string>$SCRIPTS_DIR/monthly-claude-cleanup.sh && $SCRIPTS_DIR/send-notification.sh smart-ai</string>
     </array>
     
     <key>StartCalendarInterval</key>
@@ -420,7 +420,7 @@ show_completion() {
     echo -e "${CYAN}🎮 Remote control commands:${NC}"
     if [ -x "$BIN_LINK" ]; then
         echo "   smartjanitor status       # Check what the janitor is up to"
-        echo "   smartjanitor test-weekly  # Start cleaning right now"
+        echo "   smartjanitor standard     # Start cleaning right now"
         echo "   smartjanitor logs         # See cleaning reports"
         echo "   smartjanitor schedule     # When's the next cleanup?"
         echo "   smartjanitor uninstall    # Fire the janitor (sadly)"
@@ -428,7 +428,7 @@ show_completion() {
         echo -e "${CYAN}💡 If 'smartjanitor' command not found, restart your terminal first!${NC}"
     else
         echo "   $SCRIPTS_DIR/manage-cleanup.sh status"
-        echo "   $SCRIPTS_DIR/manage-cleanup.sh test-weekly"
+        echo "   $SCRIPTS_DIR/manage-cleanup.sh standard"
     fi
     echo ""
     
@@ -455,6 +455,20 @@ show_completion() {
     df -h /System/Volumes/Data | tail -1 | awk '{print "   💾 Storage: " $3 " used / " $4 " available (" $5 " full)"}'
     echo ""
     echo -e "${CYAN}Soon this will look much better. Happy tidying! 🧹${NC}"
+    echo ""
+    
+    echo -e "${YELLOW}🚀 Ready to start cleaning? Try these commands:${NC}"
+    if command -v smartjanitor &> /dev/null; then
+        echo "   smartjanitor standard     # Quick standard cleanup"
+        if [ "$ENABLE_AI" = true ]; then
+            echo "   smartjanitor smart-ai     # Deep AI-powered analysis"
+        fi
+    else
+        echo "   $SCRIPTS_DIR/manage-cleanup.sh standard"
+        if [ "$ENABLE_AI" = true ]; then
+            echo "   $SCRIPTS_DIR/manage-cleanup.sh smart-ai"
+        fi
+    fi
     echo ""
 }
 

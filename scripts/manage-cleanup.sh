@@ -14,14 +14,14 @@ show_usage() {
     echo "  uninstall  - Stop and remove the launchd services"
     echo "  status     - Show status of services and recent logs"
     echo "  logs       - Open logs directory in Finder"
-    echo "  test-weekly   - Run weekly cleanup immediately"
-    echo "  test-monthly  - Run monthly cleanup immediately (requires API key)"
+    echo "  standard      - Run standard cleanup immediately"
+    echo "  smart-ai      - Run AI-powered cleanup immediately (requires API key)"
     echo "  schedule   - Show next scheduled run times"
     echo ""
     echo "Examples:"
     echo "  $0 install     # Set up automation"
     echo "  $0 status      # Check if everything is working"
-    echo "  $0 test-weekly # Test the weekly cleanup now"
+    echo "  $0 standard    # Run the standard cleanup now"
 }
 
 install_services() {
@@ -91,18 +91,18 @@ show_status() {
     
     # Show recent logs
     echo "Recent Activity:"
-    if [ -f "$SCRIPT_DIR/logs/latest-weekly.log" ]; then
-        echo "  📝 Last weekly cleanup:"
-        head -n 2 "$SCRIPT_DIR/logs/latest-weekly.log" | tail -n 1
+    if [ -f "$SCRIPT_DIR/logs/latest-standard.log" ]; then
+        echo "  📝 Last standard cleanup:"
+        head -n 2 "$SCRIPT_DIR/logs/latest-standard.log" | tail -n 1
     else
-        echo "  📝 No weekly cleanup logs found"
+        echo "  📝 No standard cleanup logs found"
     fi
     
-    if [ -f "$SCRIPT_DIR/logs/latest-monthly.log" ]; then
-        echo "  📝 Last monthly cleanup:"
-        head -n 2 "$SCRIPT_DIR/logs/latest-monthly.log" | tail -n 1
+    if [ -f "$SCRIPT_DIR/logs/latest-smart-ai.log" ]; then
+        echo "  📝 Last smart AI cleanup:"
+        head -n 2 "$SCRIPT_DIR/logs/latest-smart-ai.log" | tail -n 1
     else
-        echo "  📝 No monthly cleanup logs found"
+        echo "  📝 No smart AI cleanup logs found"
     fi
     
     echo ""
@@ -142,8 +142,8 @@ open_logs() {
     open "$SCRIPT_DIR/logs"
 }
 
-test_weekly() {
-    echo "🧪 Testing weekly cleanup..."
+standard() {
+    echo "🧹 Running standard cleanup..."
     echo "This will run the actual cleanup process!"
     read -p "Continue? (y/N): " -n 1 -r
     echo
@@ -152,12 +152,12 @@ test_weekly() {
         return 0
     fi
     
-    "$SCRIPT_DIR/weekly-cleanup.sh"
-    "$SCRIPT_DIR/send-notification.sh" weekly
+    "$SCRIPT_DIR/scripts/weekly-cleanup.sh"
+    "$SCRIPT_DIR/scripts/send-notification.sh" standard
 }
 
-test_monthly() {
-    echo "🧪 Testing monthly Claude cleanup..."
+smart_ai() {
+    echo "🤖 Running smart AI cleanup..."
     
     # Check for API key (optional if using subscription)
     if [ -z "$ANTHROPIC_API_KEY" ]; then
@@ -174,8 +174,8 @@ test_monthly() {
         return 0
     fi
     
-    "$SCRIPT_DIR/monthly-claude-cleanup.sh"
-    "$SCRIPT_DIR/send-notification.sh" monthly
+    "$SCRIPT_DIR/scripts/monthly-claude-cleanup.sh"
+    "$SCRIPT_DIR/scripts/send-notification.sh" smart-ai
 }
 
 # Main script logic
@@ -192,11 +192,11 @@ case "${1:-}" in
     "logs")
         open_logs
         ;;
-    "test-weekly")
-        test_weekly
+    "standard")
+        standard
         ;;
-    "test-monthly")
-        test_monthly
+    "smart-ai")
+        smart_ai
         ;;
     "schedule")
         show_schedule

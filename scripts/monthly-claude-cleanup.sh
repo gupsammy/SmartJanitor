@@ -6,8 +6,8 @@ set -e
 
 # Configuration
 SCRIPT_DIR="$HOME/.smartjanitor"
-LOG_FILE="$SCRIPT_DIR/logs/monthly-claude-$(date +%Y%m%d-%H%M%S).log"
-SUMMARY_FILE="$SCRIPT_DIR/logs/latest-monthly.log"
+LOG_FILE="$SCRIPT_DIR/logs/smart-ai-$(date +%Y%m%d-%H%M%S).log"
+SUMMARY_FILE="$SCRIPT_DIR/logs/latest-smart-ai.log"
 
 # Ensure log directory exists
 mkdir -p "$SCRIPT_DIR/logs"

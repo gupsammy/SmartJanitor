@@ -82,7 +82,7 @@ Uses macOS launchd (superior to cron):
 smartjanitor status
 
 # Start cleaning right now (test run)
-smartjanitor test-weekly
+smartjanitor standard
 
 # View cleaning reports
 smartjanitor logs

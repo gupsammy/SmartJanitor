@@ -24,8 +24,8 @@ A clear and concise description of what you expected to happen.
 
 **Logs**
 Please include relevant log files:
-- `~/.smartjanitor/logs/weekly-cleanup-*.log`
-- `~/.smartjanitor/logs/monthly-claude-*.log`
+- `~/.smartjanitor/logs/standard-cleanup-*.log`
+- `~/.smartjanitor/logs/smart-ai-*.log`
 - Any error messages from Terminal
 
 **Additional context**

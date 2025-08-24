@@ -2,7 +2,7 @@
 # Notification sender for cleanup results
 
 SCRIPT_DIR="$HOME/.smartjanitor"
-CLEANUP_TYPE="$1"  # "weekly" or "monthly"
+CLEANUP_TYPE="$1"  # "standard" or "smart-ai"
 SUMMARY_FILE="$SCRIPT_DIR/logs/latest-$CLEANUP_TYPE.log"
 
 if [ ! -f "$SUMMARY_FILE" ]; then

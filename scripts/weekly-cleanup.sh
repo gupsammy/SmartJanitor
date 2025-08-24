@@ -6,8 +6,8 @@ set -e  # Exit on error
 
 # Configuration
 SCRIPT_DIR="$HOME/.smartjanitor"
-LOG_FILE="$SCRIPT_DIR/logs/weekly-cleanup-$(date +%Y%m%d-%H%M%S).log"
-SUMMARY_FILE="$SCRIPT_DIR/logs/latest-weekly.log"
+LOG_FILE="$SCRIPT_DIR/logs/standard-cleanup-$(date +%Y%m%d-%H%M%S).log"
+SUMMARY_FILE="$SCRIPT_DIR/logs/latest-standard.log"
 
 # Ensure log directory exists
 mkdir -p "$SCRIPT_DIR/logs"
@@ -124,8 +124,8 @@ if [ "$LOG_COUNT" -gt 0 ]; then
 fi
 
 # Clean up old cleanup logs (keep last 10)
-find "$SCRIPT_DIR/logs" -name "weekly-cleanup-*.log" -type f | sort -r | tail -n +11 | xargs rm -f 2>/dev/null || true
-find "$SCRIPT_DIR/logs" -name "monthly-claude-*.log" -type f | sort -r | tail -n +6 | xargs rm -f 2>/dev/null || true
+find "$SCRIPT_DIR/logs" -name "standard-cleanup-*.log" -type f | sort -r | tail -n +11 | xargs rm -f 2>/dev/null || true
+find "$SCRIPT_DIR/logs" -name "smart-ai-*.log" -type f | sort -r | tail -n +6 | xargs rm -f 2>/dev/null || true
 
 echo -e "\n📊 Final Results"
 echo "=================================="
