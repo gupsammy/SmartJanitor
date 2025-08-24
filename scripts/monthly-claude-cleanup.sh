@@ -130,6 +130,7 @@ Begin the analysis and cleanup now."
 # Run Claude with restricted permissions
 cd "$HOME"
 claude -p "$CLAUDE_PROMPT" \
+  --model sonnet \
   --allowedTools "Bash,Read,Glob,Grep,LS,TodoWrite" \
   --disallowedTools "Write,Edit,MultiEdit,WebSearch,WebFetch" \
   --output-format json \
