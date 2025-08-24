@@ -22,11 +22,46 @@ LOGS_DIR="$INSTALL_DIR/logs"
 BIN_LINK="$HOME/.local/bin/smartjanitor"
 REPO_URL="https://raw.githubusercontent.com/gupsammy/SmartJanitor/main"
 
+# Parse command line arguments
+DEV_MODE=false
+for arg in "$@"; do
+    case $arg in
+        --dev)
+            DEV_MODE=true
+            shift
+            ;;
+        --help|-h)
+            echo "SmartJanitor Installation"
+            echo ""
+            echo "Usage: $0 [options]"
+            echo ""
+            echo "Options:"
+            echo "  --dev     Development mode (creates symlinks instead of copying files)"
+            echo "  --help    Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  $0              # Normal installation"
+            echo "  $0 --dev        # Development installation with symlinks"
+            echo ""
+            exit 0
+            ;;
+    esac
+done
+
 # Auto-detect installation mode and AI capability
 if [ -d "scripts" ] && [ -f "scripts/standard-cleanup.sh" ]; then
-    INSTALL_MODE="local"
-    SOURCE_DIR="$(pwd)/scripts"
+    if [ "$DEV_MODE" = true ]; then
+        INSTALL_MODE="dev"
+        SOURCE_DIR="$(pwd)/scripts"
+    else
+        INSTALL_MODE="local"
+        SOURCE_DIR="$(pwd)/scripts"
+    fi
 else 
+    if [ "$DEV_MODE" = true ]; then
+        echo "❌ ERROR: --dev flag requires running from repository directory with scripts/ folder"
+        exit 1
+    fi
     INSTALL_MODE="remote"
 fi
 
@@ -71,9 +106,12 @@ show_detected_config() {
     echo ""
     
     # Show installation mode
-    if [ "$INSTALL_MODE" = "local" ]; then
+    if [ "$INSTALL_MODE" = "dev" ]; then
+        print_success "Development janitor deployment - using symlinks for live editing"
+        print_janitor "Symlinking tools from: $SOURCE_DIR"
+    elif [ "$INSTALL_MODE" = "local" ]; then
         print_success "Local janitor deployment - using your workshop files"
-        print_janitor "Grabbing tools from: $SOURCE_DIR"
+        print_janitor "Copying tools from: $SOURCE_DIR"
     else
         print_janitor "Remote janitor deployment - fetching tools from the cloud"
         print_janitor "Downloading from: GitHub headquarters"
@@ -120,38 +158,13 @@ check_requirements() {
     
     print_success "Your Mac is ready for some serious tidying up"
     
-    # Check what cleaning tools are available
-    local cleaning_tools=0
-    
-    if command -v docker &> /dev/null; then
-        print_success "Docker detected - we can tackle those chunky containers"
-        cleaning_tools=$((cleaning_tools + 1))
-    else
-        print_janitor "No Docker found - that's one less mess to clean"
-    fi
-    
-    if command -v brew &> /dev/null; then
-        print_success "Homebrew spotted - time to clear those cached bottles"
-        cleaning_tools=$((cleaning_tools + 1))
-    else
-        print_janitor "No Homebrew detected - fewer crumbs to sweep up"
-    fi
-    
-    if command -v npm &> /dev/null; then
-        print_success "npm found - lots of node_modules to potentially tidy"
-        cleaning_tools=$((cleaning_tools + 1))
-    fi
-    
-    if command -v pnpm &> /dev/null; then
-        print_success "pnpm discovered - another package manager to clean"
-        cleaning_tools=$((cleaning_tools + 1))
-    fi
-    
-    if [ $cleaning_tools -eq 0 ]; then
-        print_warning "Limited cleaning tools found, but we'll still tidy what we can!"
-    else
-        print_janitor "Found $cleaning_tools cleaning targets. This will be satisfying!"
-    fi
+    print_janitor "SmartJanitor will detect and clean available tools at runtime:"
+    print_janitor "• Docker containers & images (if Docker is installed)"
+    print_janitor "• Package manager caches (npm, yarn, bun, pnpm, uv, pip, go, brew)"
+    print_janitor "• Build artifacts (.next, node_modules, target, dist, build, __pycache__)"
+    print_janitor "• Browser caches (Chrome, Safari, Firefox, Edge, Arc, Comet, etc.)"
+    print_janitor "• Application caches and large log files"
+    print_janitor "No need to have everything installed now - install tools anytime!"
     
     # Check AI capability after user choice
     if [ "$ENABLE_AI" = true ]; then
@@ -191,7 +204,20 @@ copy_or_download_scripts() {
     
     local processed=0
     
-    if [ "$INSTALL_MODE" = "local" ]; then
+    if [ "$INSTALL_MODE" = "dev" ]; then
+        # Development mode: Create symlinks for live editing
+        print_janitor "Creating symlinks for live development..."
+        for script in "${script_files[@]}"; do
+            echo -e "${CYAN}  🔗 Symlinking $script...${NC}"
+            if ln -sf "$SOURCE_DIR/$script" "$SCRIPTS_DIR/$script"; then
+                processed=$((processed + 1))
+            else
+                print_error "Failed to symlink $script - missing from workshop!"
+                exit 1
+            fi
+        done
+        print_success "All $processed development tools symlinked and ready for live editing"
+    elif [ "$INSTALL_MODE" = "local" ]; then
         # Local mode: Copy from repository directory
         print_janitor "Copying tools from your local workshop..."
         for script in "${script_files[@]}"; do
@@ -439,6 +465,11 @@ show_completion() {
     
     echo -e "${YELLOW}🧽 Pro janitor tips:${NC}"
     echo "   • First cleanup might take a while (spring cleaning!)"
+    echo "   • Install new dev tools anytime - SmartJanitor will find and clean them"
+    echo "   • Docker, package managers, browsers - all detected automatically"
+    if [ "$INSTALL_MODE" = "dev" ]; then
+        echo "   • Development mode: Edit scripts in $(pwd)/scripts/ for live changes"
+    fi
     if command -v smartjanitor &> /dev/null; then
         echo "   • Check in occasionally: smartjanitor status"
     fi

@@ -39,10 +39,10 @@ The installer will:
 **Your janitor tackles these common messes:**
 
 - 🐳 **Docker Bloat**: 20-50GB (containers, images, build cache)
-- 📦 **Dependency Hoarding**: 5-15GB (old node_modules, package caches)
-- 🗂️ **App Clutter**: 2-10GB (browser junk, updater leftovers)
+- 📦 **Package Manager Caches**: 5-20GB (npm, yarn, bun, pnpm, uv, pip, go, brew)
+- 🗂️ **Browser Caches**: 2-10GB (Chrome, Safari, Firefox, Edge, Arc, Comet + more)
+- 🏗️ **Build Artifacts**: 5-15GB (.next, node_modules, target, dist, build, __pycache__)
 - 📝 **Log Spam**: 500MB-2GB (verbose development logs)
-- 🏗️ **Build Artifacts**: 1-5GB (.next folders, dist directories)
 
 **Real cleanup:** One user freed 77GB and found 1,247 forgotten node_modules folders!
 
@@ -108,12 +108,13 @@ smartjanitor uninstall
 
 **What gets the cleaning treatment:**
 
-- ✅ Caches (Homebrew bottles, npm artifacts, browser components)
-- ✅ Build outputs (.next, dist, build folders over 7 days old)
-- ✅ Stale dependencies (node_modules over 30 days old)
-- ✅ Docker waste (unused images, stopped containers)
+- ✅ Package manager caches (npm, yarn, bun, pnpm, uv, pip, go, brew)
+- ✅ Browser caches (Chrome, Safari, Firefox, Edge, Arc, Comet, etc.)
+- ✅ Build artifacts (.next, dist, build, target, __pycache__ over 7 days old)
+- ✅ Stale dependencies (node_modules, vendor over 30 days old)
+- ✅ Docker waste (unused images, stopped containers, volumes)
 - ✅ Oversized logs (files over 10MB)
-- ✅ Temporary system files
+- ✅ Temporary system files and application caches
 
 **What never gets touched:**
 
@@ -165,7 +166,7 @@ Contributions welcome! Please read our [Contributing Guide](CONTRIBUTING.md).
 ```bash
 git clone https://github.com/gupsammy/SmartJanitor.git
 cd SmartJanitor
-./scripts/install-dev.sh
+./install.sh --dev
 ```
 
 ## 📸 Screenshots

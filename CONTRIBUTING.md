@@ -12,7 +12,7 @@ Thank you for your interest in contributing! This document provides guidelines f
    ```
 3. Install for development:
    ```bash
-   ./scripts/install-dev.sh
+   ./install.sh --dev
    ```
 
 ## 🏗️ Project Structure
@@ -42,7 +42,7 @@ SmartJanitor/
 The development installer creates symlinks instead of copying files:
 
 ```bash
-./scripts/install-dev.sh
+./install.sh --dev
 ```
 
 This allows you to edit files and see changes immediately without reinstalling.

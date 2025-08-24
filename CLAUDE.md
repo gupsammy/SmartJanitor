@@ -40,8 +40,11 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 
 ### Installation & Testing
 ```bash
-# Install in development mode
-./scripts/install-dev.sh
+# Install in development mode (creates symlinks for live editing)
+./install.sh --dev
+
+# Install normally (copies files)
+./install.sh
 
 # Run standard cleanup immediately 
 smartjanitor standard
@@ -131,10 +134,10 @@ Uses AppleScript to show cleanup results with clickable buttons:
 ## Storage Cleanup Categories
 
 The system targets these common macOS storage bloat sources:
-- **Docker**: 20-50GB (images, containers, build cache)
-- **Dependencies**: 5-15GB (old node_modules, package caches)
-- **App Caches**: 2-10GB (browser components, updater caches) 
-- **Build Artifacts**: 1-5GB (.next, dist folders)
+- **Docker**: 20-50GB (images, containers, build cache, volumes)
+- **Package Managers**: 5-20GB (npm, yarn, bun, pnpm, uv, pip, go, brew caches)
+- **Browser Caches**: 2-10GB (Chrome, Safari, Firefox, Edge, Arc, Comet + more)
+- **Build Artifacts**: 5-15GB (.next, node_modules, target, dist, build, __pycache__)
 - **Logs**: 500MB-2GB (large log files)
 
 ## Claude Code Safety Context
