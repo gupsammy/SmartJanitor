@@ -16,7 +16,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 INSTALL_DIR="$HOME/.smartjanitor"
 SCRIPTS_DIR="$INSTALL_DIR/scripts"
 LOGS_DIR="$INSTALL_DIR/logs"
-BIN_LINK="/usr/local/bin/smartjanitor"
+BIN_LINK="$HOME/.local/bin/smartjanitor"
 
 print_header() {
     echo -e "${PURPLE}"
@@ -51,7 +51,8 @@ main() {
     ln -sf "$PROJECT_DIR/scripts/manage-cleanup.sh" "$SCRIPTS_DIR/"
     
     print_step "Creating command-line shortcut..."
-    sudo ln -sf "$SCRIPTS_DIR/manage-cleanup.sh" "$BIN_LINK" 2>/dev/null || true
+    mkdir -p "$(dirname "$BIN_LINK")"
+    ln -sf "$SCRIPTS_DIR/manage-cleanup.sh" "$BIN_LINK" 2>/dev/null || true
     
     print_success "Development environment ready!"
     echo ""

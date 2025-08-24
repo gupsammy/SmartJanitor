@@ -113,7 +113,7 @@ claude -p "$CLAUDE_PROMPT" \
 ### Key File Locations
 - LaunchAgents: `~/Library/LaunchAgents/com.user.smartjanitor.*.plist`
 - Install directory: `~/.smartjanitor/`
-- Global command: `/usr/local/bin/smartjanitor`
+- Global command: `$HOME/.local/bin/smartjanitor`
 - Logs: `~/.smartjanitor/logs/`
 
 ## Logging & Notifications

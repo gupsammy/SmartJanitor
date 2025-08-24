@@ -16,7 +16,7 @@ NC='\033[0m' # No Color
 
 # Configuration
 INSTALL_DIR="$HOME/.smartjanitor"
-BIN_LINK="/usr/local/bin/smartjanitor"
+BIN_LINK="$HOME/.local/bin/smartjanitor"
 
 print_header() {
     echo -e "${RED}${BOLD}"
@@ -79,9 +79,15 @@ remove_symlink() {
     print_step "Removing janitor's remote control..."
     
     if [ -L "$BIN_LINK" ]; then
-        sudo rm "$BIN_LINK" 2>/dev/null && print_success "Global smartjanitor command removed" || print_warning "Could not remove global command"
+        rm "$BIN_LINK" 2>/dev/null && print_success "Personal smartjanitor command removed" || print_warning "Could not remove command"
     else
-        print_janitor "No global command was installed"
+        print_janitor "No personal command was installed"
+    fi
+    
+    # Also check for old location
+    if [ -L "/usr/local/bin/smartjanitor" ]; then
+        print_janitor "Found old system-wide installation - you may need to remove it manually:"
+        print_janitor "sudo rm /usr/local/bin/smartjanitor"
     fi
 }
 

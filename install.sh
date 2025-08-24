@@ -19,9 +19,23 @@ NC='\033[0m' # No Color
 INSTALL_DIR="$HOME/.smartjanitor"
 SCRIPTS_DIR="$INSTALL_DIR/scripts"
 LOGS_DIR="$INSTALL_DIR/logs"
-BIN_LINK="/usr/local/bin/smartjanitor"
+BIN_LINK="$HOME/.local/bin/smartjanitor"
 REPO_URL="https://raw.githubusercontent.com/gupsammy/SmartJanitor/main"
-ENABLE_AI=false
+
+# Auto-detect installation mode and AI capability
+if [ -d "scripts" ] && [ -f "scripts/weekly-cleanup.sh" ]; then
+    INSTALL_MODE="local"
+    SOURCE_DIR="$(pwd)/scripts"
+else 
+    INSTALL_MODE="remote"
+fi
+
+# Auto-detect AI capability
+if command -v claude &> /dev/null; then
+    ENABLE_AI=true
+else
+    ENABLE_AI=false
+fi
 
 print_header() {
     echo -e "${PURPLE}${BOLD}"
@@ -52,28 +66,30 @@ print_janitor() {
     echo -e "${CYAN}🧹 $1${NC}"
 }
 
-ask_user_choice() {
-    echo -e "${CYAN}${BOLD}🤖 AI Enhancement Available!${NC}"
+show_detected_config() {
+    echo -e "${CYAN}${BOLD}🧹 Your Janitor's Toolkit Assembly${NC}"
     echo ""
-    echo "SmartJanitor can work with Claude Code for intelligent cleanup analysis."
-    echo "This adds monthly AI-powered deep cleaning to catch edge cases."
-    echo ""
-    echo "Requirements:"
-    echo "  • Claude Code installed (npm install -g @anthropic-ai/claude-code)"  
-    echo "  • Anthropic API key or subscription"
-    echo ""
-    echo -e "${YELLOW}Without AI: Weekly bash cleanup only (still very effective!)${NC}"
-    echo -e "${GREEN}With AI: Weekly cleanup + monthly intelligent analysis${NC}"
-    echo ""
-    read -p "Enable AI-powered cleaning? (y/N): " -n 1 -r
-    echo
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        ENABLE_AI=true
-        print_success "AI cleaning enabled! Your janitor just got smarter."
+    
+    # Show installation mode
+    if [ "$INSTALL_MODE" = "local" ]; then
+        print_success "Local janitor deployment - using your workshop files"
+        print_janitor "Grabbing tools from: $SOURCE_DIR"
     else
-        print_janitor "Basic cleaning mode selected. Still plenty powerful!"
+        print_janitor "Remote janitor deployment - fetching tools from the cloud"
+        print_janitor "Downloading from: GitHub headquarters"
     fi
+    echo ""
+    
+    # Show AI capability
+    if [ "$ENABLE_AI" = true ]; then
+        print_success "Smart janitor detected - AI brain found and ready!"
+        print_janitor "Your janitor has a PhD: Weekly tidying + monthly deep analysis"
+    else
+        print_janitor "Standard janitor mode - no AI brain found (but still mighty!)" 
+        print_janitor "Weekly bash cleanup crew deployed (plenty powerful for most messes!)"
+        echo -e "${CYAN}🤖 Want a smarter janitor? Install Claude Code: npm install -g @anthropic-ai/claude-code${NC}"
+    fi
+    echo ""
 }
 
 check_requirements() {
@@ -157,37 +173,54 @@ create_directories() {
     print_success "Janitor workspace ready for business"
 }
 
-download_scripts() {
-    print_step "Fetching the janitor's cleaning tools..."
+copy_or_download_scripts() {
+    print_step "Gathering the janitor's cleaning arsenal..."
     
-    # Download main scripts
-    local scripts=(
-        "scripts/weekly-cleanup.sh"
-        "scripts/send-notification.sh"
-        "scripts/manage-cleanup.sh"
+    # Main scripts needed
+    local script_files=(
+        "weekly-cleanup.sh"
+        "send-notification.sh"
+        "manage-cleanup.sh"
     )
     
-    # Add AI script only if requested
+    # Add AI script only if AI is enabled
     if [ "$ENABLE_AI" = true ]; then
-        scripts+=("scripts/monthly-claude-cleanup.sh")
+        script_files+=("monthly-claude-cleanup.sh")
     fi
     
-    local downloaded=0
-    for script in "${scripts[@]}"; do
-        local filename=$(basename "$script")
-        local url="$REPO_URL/$script"
-        
-        echo -e "${CYAN}  📦 Fetching $filename...${NC}"
-        if curl -fsSL "$url" -o "$SCRIPTS_DIR/$filename"; then
-            chmod +x "$SCRIPTS_DIR/$filename"
-            downloaded=$((downloaded + 1))
-        else
-            print_error "Failed to download $filename - the janitor is missing a tool!"
-            exit 1
-        fi
-    done
+    local processed=0
     
-    print_success "All $downloaded cleaning tools successfully downloaded and activated"
+    if [ "$INSTALL_MODE" = "local" ]; then
+        # Local mode: Copy from repository directory
+        print_janitor "Copying tools from your local workshop..."
+        for script in "${script_files[@]}"; do
+            echo -e "${CYAN}  🔧 Installing $script...${NC}"
+            if cp "$SOURCE_DIR/$script" "$SCRIPTS_DIR/$script"; then
+                chmod +x "$SCRIPTS_DIR/$script"
+                processed=$((processed + 1))
+            else
+                print_error "Failed to copy $script - missing from workshop!"
+                exit 1
+            fi
+        done
+        print_success "All $processed cleaning tools copied from your workshop and activated"
+    else
+        # Remote mode: Download from GitHub
+        print_janitor "Downloading professional-grade tools from the cloud..."
+        for script in "${script_files[@]}"; do
+            local url="$REPO_URL/scripts/$script"
+            
+            echo -e "${CYAN}  📦 Fetching $script...${NC}"
+            if curl -fsSL "$url" -o "$SCRIPTS_DIR/$script"; then
+                chmod +x "$SCRIPTS_DIR/$script"
+                processed=$((processed + 1))
+            else
+                print_error "Failed to download $script - the janitor is missing a tool!"
+                exit 1
+            fi
+        done
+        print_success "All $processed cleaning tools successfully downloaded and activated"
+    fi
 }
 
 create_launchd_plists() {
@@ -311,19 +344,40 @@ EOF
 create_symlink() {
     print_step "Installing the janitor's remote control..."
     
-    # Create symlink for easy access
+    # Create user bin directory (no sudo needed!)
+    mkdir -p "$(dirname "$BIN_LINK")"
+    
+    # Remove existing symlink if it exists
     if [ -L "$BIN_LINK" ]; then
         rm "$BIN_LINK"
     fi
     
-    # Ensure /usr/local/bin exists
-    sudo mkdir -p /usr/local/bin 2>/dev/null || true
-    
-    if sudo ln -sf "$SCRIPTS_DIR/manage-cleanup.sh" "$BIN_LINK" 2>/dev/null; then
-        print_success "Command 'smartjanitor' is now available everywhere"
+    # Create symlink in user space
+    if ln -sf "$SCRIPTS_DIR/manage-cleanup.sh" "$BIN_LINK"; then
+        print_success "Command 'smartjanitor' ready in your personal toolkit"
+        
+        # Add to PATH if not already there
+        if [[ ":$PATH:" != *":$(dirname "$BIN_LINK"):"* ]]; then
+            print_janitor "Adding janitor tools to your PATH..."
+            
+            # Add to shell profile
+            local shell_profile=""
+            if [ -n "$ZSH_VERSION" ] || [ "$SHELL" = "/bin/zsh" ]; then
+                shell_profile="$HOME/.zshrc"
+            elif [ -n "$BASH_VERSION" ] || [ "$SHELL" = "/bin/bash" ]; then
+                shell_profile="$HOME/.bash_profile"
+            fi
+            
+            if [ -n "$shell_profile" ]; then
+                echo "export PATH=\"$(dirname "$BIN_LINK"):\$PATH\"" >> "$shell_profile"
+                print_success "Added to $shell_profile - restart terminal or run: source $shell_profile"
+            fi
+        else
+            print_success "Already in your PATH - ready to use!"
+        fi
     else
-        print_warning "Could not create global command (sudo failed)"
-        print_janitor "You can still summon the janitor: $SCRIPTS_DIR/manage-cleanup.sh"
+        print_warning "Could not create command shortcut"
+        print_janitor "No worries! You can still summon the janitor: $SCRIPTS_DIR/manage-cleanup.sh"
     fi
 }
 
@@ -363,12 +417,14 @@ show_completion() {
     echo ""
     
     echo -e "${CYAN}🎮 Remote control commands:${NC}"
-    if command -v smartjanitor &> /dev/null; then
+    if [ -x "$BIN_LINK" ]; then
         echo "   smartjanitor status       # Check what the janitor is up to"
         echo "   smartjanitor test-weekly  # Start cleaning right now"
         echo "   smartjanitor logs         # See cleaning reports"
         echo "   smartjanitor schedule     # When's the next cleanup?"
         echo "   smartjanitor uninstall    # Fire the janitor (sadly)"
+        echo ""
+        echo -e "${CYAN}💡 If 'smartjanitor' command not found, restart your terminal first!${NC}"
     else
         echo "   $SCRIPTS_DIR/manage-cleanup.sh status"
         echo "   $SCRIPTS_DIR/manage-cleanup.sh test-weekly"
@@ -409,19 +465,14 @@ main() {
     echo "Just a clean Mac that maintains itself."
     echo ""
     
-    read -p "Ready to hire your personal janitor? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        print_janitor "Maybe next time when the mess gets too much!"
-        exit 0
-    fi
+    show_detected_config
     
+    print_janitor "Deploying your automated cleanup crew..."
     echo ""
     
-    ask_user_choice
     check_requirements
     create_directories
-    download_scripts
+    copy_or_download_scripts
     create_launchd_plists
     create_symlink
     install_services
