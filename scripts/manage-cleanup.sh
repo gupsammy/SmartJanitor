@@ -28,7 +28,7 @@ install_services() {
     echo "Installing storage cleanup automation..."
     
     # Load the weekly service
-    launchctl load ~/Library/LaunchAgents/com.user.smartjanitor.weekly.plist
+    launchctl load ~/Library/LaunchAgents/com.user.smartjanitor.standard.plist
     if [ $? -eq 0 ]; then
         echo "✅ Weekly cleanup service installed"
     else
@@ -36,7 +36,7 @@ install_services() {
     fi
     
     # Load the monthly service
-    launchctl load ~/Library/LaunchAgents/com.user.smartjanitor.monthly.plist
+    launchctl load ~/Library/LaunchAgents/com.user.smartjanitor.smart-ai.plist
     if [ $? -eq 0 ]; then
         echo "✅ Monthly cleanup service installed"
     else
@@ -75,13 +75,13 @@ show_status() {
     
     # Check if services are loaded
     echo "Service Status:"
-    if launchctl list | grep -q "com.user.smartjanitor.weekly"; then
+    if launchctl list | grep -q "com.user.smartjanitor.standard"; then
         echo "  ✅ Weekly service: Running"
     else
         echo "  ❌ Weekly service: Not running"
     fi
     
-    if launchctl list | grep -q "com.user.smartjanitor.monthly"; then
+    if launchctl list | grep -q "com.user.smartjanitor.smart-ai"; then
         echo "  ✅ Monthly service: Running"  
     else
         echo "  ❌ Monthly service: Not running"
@@ -152,7 +152,7 @@ standard() {
         return 0
     fi
     
-    "$SCRIPT_DIR/scripts/weekly-cleanup.sh"
+    "$SCRIPT_DIR/scripts/standard-cleanup.sh"
     "$SCRIPT_DIR/scripts/send-notification.sh" standard
 }
 
@@ -174,7 +174,7 @@ smart_ai() {
         return 0
     fi
     
-    "$SCRIPT_DIR/scripts/monthly-claude-cleanup.sh"
+    "$SCRIPT_DIR/scripts/smart-ai-cleanup.sh"
     "$SCRIPT_DIR/scripts/send-notification.sh" smart-ai
 }
 

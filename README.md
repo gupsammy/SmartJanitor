@@ -149,8 +149,8 @@ No more wondering what happened while you were away.
 ```
 ~/.smartjanitor/
 ├── scripts/
-│   ├── weekly-cleanup.sh      # Fast bash cleanup
-│   ├── monthly-claude.sh      # AI-powered analysis
+│   ├── standard-cleanup.sh      # Fast bash cleanup
+│   ├── smart-ai-cleanup.sh      # AI-powered analysis
 │   └── send-notification.sh   # Interactive notifications
 ├── logs/                      # Cleanup logs and summaries
 └── manage.sh                  # Main management script

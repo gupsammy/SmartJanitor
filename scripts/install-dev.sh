@@ -45,8 +45,8 @@ main() {
     mkdir -p "$SCRIPTS_DIR" "$LOGS_DIR"
     
     print_step "Creating symlinks to development scripts..."
-    ln -sf "$PROJECT_DIR/scripts/weekly-cleanup.sh" "$SCRIPTS_DIR/"
-    ln -sf "$PROJECT_DIR/scripts/monthly-claude-cleanup.sh" "$SCRIPTS_DIR/"
+    ln -sf "$PROJECT_DIR/scripts/standard-cleanup.sh" "$SCRIPTS_DIR/"
+    ln -sf "$PROJECT_DIR/scripts/smart-ai-cleanup.sh" "$SCRIPTS_DIR/"
     ln -sf "$PROJECT_DIR/scripts/send-notification.sh" "$SCRIPTS_DIR/"
     ln -sf "$PROJECT_DIR/scripts/manage-cleanup.sh" "$SCRIPTS_DIR/"
     

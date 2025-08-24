@@ -23,7 +23,7 @@ BIN_LINK="$HOME/.local/bin/smartjanitor"
 REPO_URL="https://raw.githubusercontent.com/gupsammy/SmartJanitor/main"
 
 # Auto-detect installation mode and AI capability
-if [ -d "scripts" ] && [ -f "scripts/weekly-cleanup.sh" ]; then
+if [ -d "scripts" ] && [ -f "scripts/standard-cleanup.sh" ]; then
     INSTALL_MODE="local"
     SOURCE_DIR="$(pwd)/scripts"
 else 
@@ -178,7 +178,7 @@ copy_or_download_scripts() {
     
     # Main scripts needed
     local script_files=(
-        "weekly-cleanup.sh"
+        "standard-cleanup.sh"
         "send-notification.sh"
         "manage-cleanup.sh"
         "uninstall.sh"
@@ -186,7 +186,7 @@ copy_or_download_scripts() {
     
     # Add AI script only if AI is enabled
     if [ "$ENABLE_AI" = true ]; then
-        script_files+=("monthly-claude-cleanup.sh")
+        script_files+=("smart-ai-cleanup.sh")
     fi
     
     local processed=0
@@ -228,19 +228,19 @@ create_launchd_plists() {
     print_step "Teaching macOS when to summon the janitor..."
     
     # Weekly plist
-    cat > "$HOME/Library/LaunchAgents/com.user.smartjanitor.weekly.plist" << EOF
+    cat > "$HOME/Library/LaunchAgents/com.user.smartjanitor.standard.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.user.smartjanitor.weekly</string>
+    <string>com.user.smartjanitor.standard</string>
     
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>$SCRIPTS_DIR/weekly-cleanup.sh && $SCRIPTS_DIR/send-notification.sh standard</string>
+        <string>$SCRIPTS_DIR/standard-cleanup.sh && $SCRIPTS_DIR/send-notification.sh standard</string>
     </array>
     
     <key>StartCalendarInterval</key>
@@ -268,9 +268,9 @@ create_launchd_plists() {
     </dict>
     
     <key>StandardOutPath</key>
-    <string>$LOGS_DIR/weekly-launchd.out</string>
+    <string>$LOGS_DIR/standard-launchd.out</string>
     <key>StandardErrorPath</key>
-    <string>$LOGS_DIR/weekly-launchd.err</string>
+    <string>$LOGS_DIR/standard-launchd.err</string>
     
     <key>UserName</key>
     <string>$(whoami)</string>
@@ -283,19 +283,19 @@ EOF
 
     # Monthly plist (only if AI is enabled)
     if [ "$ENABLE_AI" = true ]; then
-        cat > "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist" << EOF
+        cat > "$HOME/Library/LaunchAgents/com.user.smartjanitor.smart-ai.plist" << EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
     <key>Label</key>
-    <string>com.user.smartjanitor.monthly</string>
+    <string>com.user.smartjanitor.smart-ai</string>
     
     <key>ProgramArguments</key>
     <array>
         <string>/bin/bash</string>
         <string>-c</string>
-        <string>$SCRIPTS_DIR/monthly-claude-cleanup.sh && $SCRIPTS_DIR/send-notification.sh smart-ai</string>
+        <string>$SCRIPTS_DIR/smart-ai-cleanup.sh && $SCRIPTS_DIR/send-notification.sh smart-ai</string>
     </array>
     
     <key>StartCalendarInterval</key>
@@ -325,9 +325,9 @@ EOF
     </dict>
     
     <key>StandardOutPath</key>
-    <string>$LOGS_DIR/monthly-launchd.out</string>
+    <string>$LOGS_DIR/smart-ai-launchd.out</string>
     <key>StandardErrorPath</key>
-    <string>$LOGS_DIR/monthly-launchd.err</string>
+    <string>$LOGS_DIR/smart-ai-launchd.err</string>
     
     <key>UserName</key>
     <string>$(whoami)</string>
@@ -386,15 +386,15 @@ install_services() {
     print_step "Putting the janitor on duty..."
     
     # Load weekly service
-    if launchctl load "$HOME/Library/LaunchAgents/com.user.smartjanitor.weekly.plist" 2>/dev/null; then
+    if launchctl load "$HOME/Library/LaunchAgents/com.user.smartjanitor.standard.plist" 2>/dev/null; then
         print_success "Weekly cleaning crew is now on the schedule"
     else
         print_warning "Weekly service may already be on duty"
     fi
     
     # Load monthly service (if AI is enabled)
-    if [ "$ENABLE_AI" = true ] && [ -f "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist" ]; then
-        if launchctl load "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist" 2>/dev/null; then
+    if [ "$ENABLE_AI" = true ] && [ -f "$HOME/Library/LaunchAgents/com.user.smartjanitor.smart-ai.plist" ]; then
+        if launchctl load "$HOME/Library/LaunchAgents/com.user.smartjanitor.smart-ai.plist" 2>/dev/null; then
             print_success "AI-powered monthly deep clean is scheduled"
         else
             print_warning "Monthly AI service may already be active"

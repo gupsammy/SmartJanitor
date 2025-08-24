@@ -13,8 +13,8 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 ## Architecture
 
 ### Core Components
-- `scripts/weekly-cleanup.sh` - Pure bash cleanup script for speed and reliability
-- `scripts/monthly-claude-cleanup.sh` - AI-powered deep analysis using Claude Code
+- `scripts/standard-cleanup.sh` - Pure bash cleanup script for speed and reliability
+- `scripts/smart-ai-cleanup.sh` - AI-powered deep analysis using Claude Code
 - `scripts/manage-cleanup.sh` - Management interface and user commands  
 - `scripts/send-notification.sh` - Interactive notification system using AppleScript
 - `install.sh` - One-line installer that sets up everything
@@ -23,8 +23,8 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 ```
 ~/.smartjanitor/
 ├── scripts/                    # All executable scripts
-│   ├── weekly-cleanup.sh      # Fast bash cleanup
-│   ├── monthly-claude.sh      # AI analysis
+│   ├── standard-cleanup.sh      # Fast bash cleanup
+│   ├── smart-ai-cleanup.sh      # AI analysis
 │   ├── manage-cleanup.sh      # Management commands  
 │   └── send-notification.sh   # Notifications
 ├── logs/                      # Cleanup logs and summaries
@@ -32,8 +32,8 @@ The system uses macOS `launchd` for reliable scheduling and runs even when the M
 ```
 
 ### Scheduling
-- **Weekly**: Every Sunday at 10:00 AM via `com.user.smartjanitor.weekly.plist`
-- **Monthly**: 1st of each month at 9:00 AM via `com.user.smartjanitor.monthly.plist`
+- **Weekly**: Every Sunday at 10:00 AM via `com.user.smartjanitor.standard.plist`
+- **Monthly**: 1st of each month at 9:00 AM via `com.user.smartjanitor.smart-ai.plist`
 - Uses macOS `launchd` which handles sleep/wake scenarios properly
 
 ## Development Commands
@@ -119,9 +119,9 @@ claude -p "$CLAUDE_PROMPT" \
 ## Logging & Notifications
 
 ### Log Structure
-- Detailed logs: `logs/weekly-cleanup-YYYYMMDD-HHMMSS.log`
+- Detailed logs: `logs/standard-cleanup-YYYYMMDD-HHMMSS.log`
 - Summary logs: `logs/latest-standard.log`, `logs/latest-smart-ai.log`
-- LaunchD logs: `logs/weekly-launchd.out`, `logs/monthly-launchd.out`
+- LaunchD logs: `logs/standard-launchd.out`, `logs/smart-ai-launchd.out`
 
 ### Interactive Notifications
 Uses AppleScript to show cleanup results with clickable buttons:

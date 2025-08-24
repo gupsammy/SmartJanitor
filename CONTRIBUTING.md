@@ -20,8 +20,8 @@ Thank you for your interest in contributing! This document provides guidelines f
 ```
 SmartJanitor/
 ├── scripts/
-│   ├── weekly-cleanup.sh         # Main bash cleanup logic
-│   ├── monthly-claude-cleanup.sh # Claude Code integration
+│   ├── standard-cleanup.sh         # Main bash cleanup logic
+│   ├── smart-ai-cleanup.sh # Claude Code integration
 │   ├── send-notification.sh      # macOS notification system
 │   └── manage-cleanup.sh         # CLI management interface
 ├── install.sh                    # One-line installer

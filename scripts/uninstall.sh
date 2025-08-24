@@ -47,13 +47,13 @@ unload_services() {
     print_step "Stopping the janitor's work schedule..."
     
     # Unload services
-    if launchctl list | grep -q "com.user.smartjanitor.weekly"; then
-        launchctl unload "$HOME/Library/LaunchAgents/com.user.smartjanitor.weekly.plist" 2>/dev/null || true
+    if launchctl list | grep -q "com.user.smartjanitor.standard"; then
+        launchctl unload "$HOME/Library/LaunchAgents/com.user.smartjanitor.standard.plist" 2>/dev/null || true
         print_success "Weekly cleaning service stopped"
     fi
     
-    if launchctl list | grep -q "com.user.smartjanitor.monthly"; then
-        launchctl unload "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist" 2>/dev/null || true
+    if launchctl list | grep -q "com.user.smartjanitor.smart-ai"; then
+        launchctl unload "$HOME/Library/LaunchAgents/com.user.smartjanitor.smart-ai.plist" 2>/dev/null || true
         print_success "Monthly AI analysis service stopped"
     fi
 }
@@ -62,8 +62,8 @@ remove_plists() {
     print_step "Removing janitor's scheduling system..."
     
     local plists=(
-        "$HOME/Library/LaunchAgents/com.user.smartjanitor.weekly.plist"
-        "$HOME/Library/LaunchAgents/com.user.smartjanitor.monthly.plist"
+        "$HOME/Library/LaunchAgents/com.user.smartjanitor.standard.plist"
+        "$HOME/Library/LaunchAgents/com.user.smartjanitor.smart-ai.plist"
     )
     
     for plist in "${plists[@]}"; do
