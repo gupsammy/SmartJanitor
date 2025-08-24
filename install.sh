@@ -181,6 +181,7 @@ copy_or_download_scripts() {
         "weekly-cleanup.sh"
         "send-notification.sh"
         "manage-cleanup.sh"
+        "uninstall.sh"
     )
     
     # Add AI script only if AI is enabled

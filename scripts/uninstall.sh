@@ -95,23 +95,9 @@ remove_files() {
     print_step "Clearing out the janitor's workspace..."
     
     if [ -d "$INSTALL_DIR" ]; then
-        # Show what will be removed
-        echo -e "${YELLOW}The janitor's belongings to be removed:${NC}"
-        echo "  $INSTALL_DIR/"
-        echo "    ├── scripts/ (cleaning tools)"
-        echo "    └── logs/ (cleaning history)"
-        echo ""
-        
-        read -p "Remove all janitor files and logs? (y/N): " -n 1 -r
-        echo
-        
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            rm -rf "$INSTALL_DIR"
-            print_success "Janitor workspace completely cleared"
-        else
-            print_warning "Janitor's files preserved at $INSTALL_DIR"
-            print_janitor "You can clean them up manually later if needed"
-        fi
+        print_janitor "Removing scripts, logs, and configuration files..."
+        rm -rf "$INSTALL_DIR"
+        print_success "Janitor workspace completely cleared"
     else
         print_success "No janitor workspace found (already clean!)"
     fi
@@ -128,11 +114,7 @@ show_completion() {
     echo -e "  ✨ Stopped all scheduled cleaning services"
     echo -e "  ✨ Removed automation scheduling"
     echo -e "  ✨ Disconnected remote control commands"
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        echo -e "  ✨ Cleaned out all scripts and logs"
-    else
-        echo -e "  🗂️  Preserved cleaning history and tools"
-    fi
+    echo -e "  ✨ Cleaned out all scripts and logs"
     echo ""
     
     echo -e "${YELLOW}⚠️  Your Mac will no longer automatically clean itself${NC}"
@@ -149,18 +131,7 @@ show_completion() {
 main() {
     print_header
     
-    echo -e "${YELLOW}This will dismiss your SmartJanitor and stop all automated cleaning.${NC}"
-    echo "Your Mac will go back to accumulating digital dust."
-    echo "Are you sure about this?"
-    echo ""
-    
-    read -p "Fire your janitor? (y/N): " -n 1 -r
-    echo
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        print_janitor "Smart choice! Your janitor stays on the job."
-        exit 0
-    fi
-    
+    print_janitor "Dismissing your automated cleanup crew..."
     echo ""
     
     unload_services

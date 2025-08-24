@@ -53,15 +53,20 @@ install_services() {
 }
 
 uninstall_services() {
-    echo "Uninstalling storage cleanup automation..."
+    echo "🧹 Running complete SmartJanitor uninstall..."
+    echo ""
     
-    # Unload services
-    launchctl unload ~/Library/LaunchAgents/com.user.smartjanitor.weekly.plist 2>/dev/null
-    launchctl unload ~/Library/LaunchAgents/com.user.smartjanitor.monthly.plist 2>/dev/null
-    
-    echo "✅ Services uninstalled"
-    echo "💡 Scripts and logs remain in $SCRIPT_DIR"
-    echo "💡 To completely remove: rm -rf $SCRIPT_DIR"
+    # Run the proper uninstall script
+    if [ -f "$SCRIPT_DIR/scripts/uninstall.sh" ]; then
+        exec "$SCRIPT_DIR/scripts/uninstall.sh"
+    else
+        echo "❌ Uninstall script not found"
+        echo "💡 Manual cleanup required:"
+        echo "  launchctl unload ~/Library/LaunchAgents/com.user.smartjanitor.*.plist"
+        echo "  rm ~/Library/LaunchAgents/com.user.smartjanitor.*.plist"
+        echo "  rm -rf $SCRIPT_DIR"
+        echo "  rm $HOME/.local/bin/smartjanitor"
+    fi
 }
 
 show_status() {
